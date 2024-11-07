@@ -12,6 +12,14 @@
 
 USE setadata;
 
+SELECT *
+FROM setadata.dbo.prod_fifa21;
+
+--duplicate table
+SELECT *
+INTO setadata.dbo.fifa21
+FROM setadata.dbo.prod_fifa21;
+
 -- explore the data
 SELECT * 
 FROM setadata.dbo.fifa21;
@@ -343,15 +351,17 @@ UPDATE setadata.dbo.fifa21
 SET height = ROUND(((LEFT(height, 1)*12)+(SUBSTRING(height, 3, CHARINDEX('"', height)-3)))*2.54,0)
 WHERE height LIKE '%"';
 
--- update the column with teh extracted values
+-- update the column with the extracted values
 UPDATE setadata.dbo.fifa21
 SET height = SUBSTRING(height, 1, LEN(height)-2)
 WHERE height LIKE '%cm';
 
+UPDATE setadata.dbo.fifa21
+SET height = ROUND(height, 0);
+
 -- change the datatype to int
 ALTER TABLE setadata.dbo.fifa21
 ALTER COLUMN height int;
-
 
 /* 6. correct club name and remove extra space
 a. explore the club column
@@ -641,3 +651,5 @@ EXEC sp_rename 'fifa21.weight', 'Weight(kg)';
 EXEC sp_rename 'fifa21.[Loan Date End]', 'Loan Date';
 EXEC sp_rename 'fifa21.contract', 'Contract End Year';
 EXEC sp_rename 'fifa21.Joined', 'Joined Date';
+
+select * from setadata.dbo.fifa21
